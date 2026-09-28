@@ -1,14 +1,18 @@
 export class Produto {
     #descricao;
-    #preco;
+    #precoCompra;
+    #precoVenda;
     #quantidadeEstoque;
     #vetVendas;
+    #fornecedor;
 
-    constructor(descricao, preco = 0, quantidadeEstoque = 0) {
+    constructor(descricao, precoCompra = 0, precoVenda = 0, quantidadeEstoque = 0) {
         this.#descricao = descricao.toUpperCase();
-        this.#preco = preco;
+        this.#precoCompra = precoCompra;
+        this.#precoVenda = precoVenda;
         this.#quantidadeEstoque = quantidadeEstoque;
         this.#vetVendas = [];
+        this.#fornecedor = undefined;
 
         for (let i = 0; i < 12; i++) {
             this.#vetVendas.push(0);
@@ -20,18 +24,28 @@ export class Produto {
     }
 
     set descricao(novaDescricao) {
-        if (novaDescricao != "") {
+        if (novaDescricao != undefined && novaDescricao != "") {
             this.#descricao = novaDescricao.toUpperCase();
         }
     }
 
-    get preco() {
-        return this.#preco;
+    get precoCompra() {
+        return this.#precoCompra;
     }
 
-    set preco(novoPreco) {
-        if (novoPreco >= 0) {
-            this.#preco = novoPreco;
+    set precoCompra(novoPrecoCompra) {
+        if (novoPrecoCompra >= 0) {
+            this.#precoCompra = novoPrecoCompra;
+        }
+    }
+
+    get precoVenda() {
+        return this.#precoVenda;
+    }
+
+    set precoVenda(novoPrecoVenda) {
+        if (novoPrecoVenda >= 0) {
+            this.#precoVenda = novoPrecoVenda;
         }
     }
 
@@ -43,6 +57,14 @@ export class Produto {
         if (novaQuantidade >= 0) {
             this.#quantidadeEstoque = novaQuantidade;
         }
+    }
+
+    get fornecedor() {
+        return this.#fornecedor;
+    }
+
+    set fornecedor(novoFornecedor) {
+        this.#fornecedor = novoFornecedor;
     }
 
     getQtdVendasMes(mes) {
@@ -59,8 +81,34 @@ export class Produto {
     }
 
     toString() {
-        return "Descrição: " + this.#descricao + "\nPreço: " + this.#preco +
+        let texto = "Descrição: " + this.#descricao +
+            "\nPreço de Compra: R$ " + this.#precoCompra +
+            "\nPreço de Venda: R$ " + this.#precoVenda +
             "\nQuantidade em Estoque: " + this.#quantidadeEstoque +
             "\nVendas no Ano: " + this.#vetVendas;
+
+        if (this.#fornecedor != undefined) {
+            texto += "\nFornecedor: " + this.#fornecedor.razaoSocial +
+                "\nCNPJ do Fornecedor: " + this.#fornecedor.cnpj;
+        }
+
+        return texto;
+    }
+
+    stringify() {
+        let cnpjFornecedor = null;
+
+        if (this.#fornecedor != undefined) {
+            cnpjFornecedor = this.#fornecedor.cnpj;
+        }
+
+        return JSON.stringify({
+            descricao: this.#descricao,
+            precoCompra: this.#precoCompra,
+            precoVenda: this.#precoVenda,
+            quantidadeEstoque: this.#quantidadeEstoque,
+            vetVendas: this.#vetVendas,
+            fornecedor: cnpjFornecedor
+        });
     }
 }
