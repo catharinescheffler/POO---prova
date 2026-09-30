@@ -1,4 +1,4 @@
-import { ArmazemController } from "./ArmazemController.js";
+import { ArmazemController } from "./armazemController.js";
 
 const controller = new ArmazemController();
 controller.carregarDados();
