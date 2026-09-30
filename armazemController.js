@@ -57,6 +57,7 @@ export class ArmazemController {
             razaoSocial, cnpj, telefone, endereco, Number(creditoDisp)
         );
         this.#vetFornecedores.push(fornecedor);
+        this.salvarDados();
         return "SUCESSO";
     }
 
@@ -76,6 +77,7 @@ export class ArmazemController {
             item.cnpj == cnpj
         );
         this.#vetFornecedores.splice(indice, 1);
+        this.salvarDados();
         return "SUCESSO";
     }
 
@@ -96,6 +98,8 @@ export class ArmazemController {
         if (novosDados.creditoDisp != undefined && novosDados.creditoDisp != "") {
             fornecedor.creditoDisp = Number(novosDados.creditoDisp);
         }
+
+        this.salvarDados();
         return "SUCESSO";
     }
 
@@ -143,6 +147,7 @@ export class ArmazemController {
             produto.fornecedor = fornecedor;
         }
         this.#vetProdutos.push(produto);
+        this.salvarDados();
         return "SUCESSO";
     }
 
@@ -154,6 +159,7 @@ export class ArmazemController {
             return "PRODUTO_NAO_ENCONTRADO";
         }
         this.#vetProdutos.splice(indice, 1);
+        this.salvarDados();
         return "SUCESSO";
     }
 
@@ -178,6 +184,8 @@ export class ArmazemController {
             }
             produto.fornecedor = fornecedor;
         }
+
+        this.salvarDados();
         return "SUCESSO";
     }
 
@@ -203,6 +211,7 @@ export class ArmazemController {
         }
 
         produto.setQtdVendasMes(mes, quantidadeVendida);
+        this.salvarDados();
         return "SUCESSO";
     }
 
@@ -249,6 +258,7 @@ export class ArmazemController {
 
         produto.quantidadeEstoque = produto.quantidadeEstoque + quantidade;
 
+        this.salvarDados();
         return "SUCESSO";
     }
 
@@ -269,6 +279,9 @@ export class ArmazemController {
         produto.quantidadeEstoque = produto.quantidadeEstoque - quantidadeVendida;
 
         let totalVenda = quantidadeVendida * produto.precoVenda;
+
+        this.salvarDados();
+
         return {
             codigo: "SUCESSO",
             totalVenda: totalVenda
