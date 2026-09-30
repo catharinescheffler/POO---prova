@@ -1,9 +1,7 @@
-
 import { Produto } from "./produto.js";
 import { Fornecedor } from "./fornecedor.js";
 
 export class ArmazemController {
-
     #vetProdutos;
     #vetFornecedores;
 
@@ -11,8 +9,6 @@ export class ArmazemController {
         this.#vetProdutos = [];
         this.#vetFornecedores = [];
     }
-
-    // Métodos auxiliares
 
     #buscarProduto(descricao) {
         return this.#vetProdutos.find(produto =>
@@ -29,12 +25,10 @@ export class ArmazemController {
     #produtoDTO(produto) {
         let cnpjFornecedor = undefined;
         let razaoSocialFornecedor = undefined;
-
         if (produto.fornecedor != undefined) {
             cnpjFornecedor = produto.fornecedor.cnpj;
             razaoSocialFornecedor = produto.fornecedor.razaoSocial;
         }
-
         return {
             descricao: produto.descricao,
             precoCompra: produto.precoCompra,
@@ -55,131 +49,99 @@ export class ArmazemController {
         };
     }
 
-    // Métodos para manipular Fornecedores
-
     cadastrarFornecedor(razaoSocial, cnpj, telefone, endereco, creditoDisp) {
         if (this.#buscarFornecedor(cnpj) != undefined) {
             return "FORNECEDOR_JA_CADASTRADO";
         }
-
         let fornecedor = new Fornecedor(
             razaoSocial, cnpj, telefone, endereco, Number(creditoDisp)
         );
-
         this.#vetFornecedores.push(fornecedor);
         return "SUCESSO";
     }
 
     excluirFornecedor(cnpj) {
         let fornecedor = this.#buscarFornecedor(cnpj);
-
         if (fornecedor == undefined) {
             return "FORNECEDOR_NAO_ENCONTRADO";
         }
-
         let produtoVinculado = this.#vetProdutos.find(produto =>
             produto.fornecedor != undefined &&
             produto.fornecedor.cnpj == cnpj
         );
-
         if (produtoVinculado != undefined) {
             return "FORNECEDOR_VINCULADO_A_PRODUTO";
         }
-
         let indice = this.#vetFornecedores.findIndex(item =>
             item.cnpj == cnpj
         );
-
         this.#vetFornecedores.splice(indice, 1);
         return "SUCESSO";
     }
 
     alterarFornecedor(cnpj, novosDados) {
         let fornecedor = this.#buscarFornecedor(cnpj);
-
         if (fornecedor == undefined) {
             return "FORNECEDOR_NAO_ENCONTRADO";
         }
-
-        if (novosDados.razaoSocial != undefined &&
-            novosDados.razaoSocial != "") {
+        if (novosDados.razaoSocial != undefined && novosDados.razaoSocial != "") {
             fornecedor.razaoSocial = novosDados.razaoSocial;
         }
-
-        if (novosDados.telefone != undefined &&
-            novosDados.telefone != "") {
+        if (novosDados.telefone != undefined && novosDados.telefone != "") {
             fornecedor.telefone = novosDados.telefone;
         }
-
-        if (novosDados.endereco != undefined &&
-            novosDados.endereco != "") {
+        if (novosDados.endereco != undefined && novosDados.endereco != "") {
             fornecedor.endereco = novosDados.endereco;
         }
-
-        if (novosDados.creditoDisp != undefined &&
-            novosDados.creditoDisp != "") {
+        if (novosDados.creditoDisp != undefined && novosDados.creditoDisp != "") {
             fornecedor.creditoDisp = Number(novosDados.creditoDisp);
         }
-
         return "SUCESSO";
     }
 
     consultarFornecedor(cnpj) {
         let fornecedor = this.#buscarFornecedor(cnpj);
-
         if (fornecedor == undefined) {
             return "FORNECEDOR_NAO_ENCONTRADO";
         }
-
         return this.#fornecedorDTO(fornecedor);
     }
 
     listarFornecedores() {
         let lista = [];
-
         for (let fornecedor of this.#vetFornecedores) {
             lista.push(this.#fornecedorDTO(fornecedor));
         }
-
         return lista;
     }
 
     filtrarFornecedoresPorCredito(creditoMinimo) {
         let lista = [];
-
         for (let fornecedor of this.#vetFornecedores) {
             if (fornecedor.creditoDisp > Number(creditoMinimo)) {
                 lista.push(this.#fornecedorDTO(fornecedor));
             }
         }
-
         return lista;
     }
-
-    // Métodos para manipular Produtos
 
     cadastrarProduto(descricao, precoCompra, precoVenda, quantidadeEstoque, cnpjFornecedor) {
         if (this.#buscarProduto(descricao) != undefined) {
             return "PRODUTO_JA_CADASTRADO";
         }
-
         let produto = new Produto(
             descricao,
             Number(precoCompra),
             Number(precoVenda),
             Number(quantidadeEstoque)
         );
-
         if (cnpjFornecedor != undefined && cnpjFornecedor != "") {
             let fornecedor = this.#buscarFornecedor(cnpjFornecedor);
-
             if (fornecedor == undefined) {
                 return "FORNECEDOR_NAO_ENCONTRADO";
             }
-
             produto.fornecedor = fornecedor;
         }
-
         this.#vetProdutos.push(produto);
         return "SUCESSO";
     }
@@ -188,64 +150,51 @@ export class ArmazemController {
         let indice = this.#vetProdutos.findIndex(produto =>
             produto.descricao.toUpperCase() == descricao.toUpperCase()
         );
-
         if (indice == -1) {
             return "PRODUTO_NAO_ENCONTRADO";
         }
-
         this.#vetProdutos.splice(indice, 1);
         return "SUCESSO";
     }
 
     alterarProduto(descricao, novosDados) {
         let produto = this.#buscarProduto(descricao);
-
         if (produto == undefined) {
             return "PRODUTO_NAO_ENCONTRADO";
         }
-
         if (novosDados.precoCompra != undefined &&
             novosDados.precoCompra != "") {
             produto.precoCompra = Number(novosDados.precoCompra);
         }
-
         if (novosDados.precoVenda != undefined &&
             novosDados.precoVenda != "") {
             produto.precoVenda = Number(novosDados.precoVenda);
         }
-
         if (novosDados.quantidadeEstoque != undefined &&
             novosDados.quantidadeEstoque != "") {
             produto.quantidadeEstoque = Number(novosDados.quantidadeEstoque);
         }
-
         if (novosDados.cnpjFornecedor != undefined &&
             novosDados.cnpjFornecedor != "") {
             let fornecedor = this.#buscarFornecedor(novosDados.cnpjFornecedor);
-
             if (fornecedor == undefined) {
                 return "FORNECEDOR_NAO_ENCONTRADO";
             }
-
             produto.fornecedor = fornecedor;
         }
-
         return "SUCESSO";
     }
 
     consultarProduto(descricao) {
         let produto = this.#buscarProduto(descricao);
-
         if (produto == undefined) {
             return "PRODUTO_NAO_ENCONTRADO";
         }
-
         return this.#produtoDTO(produto);
     }
 
     alterarVendaMes(descricao, mes, quantidadeVendida) {
         let produto = this.#buscarProduto(descricao);
-
         if (produto == undefined) {
             return "PRODUTO_NAO_ENCONTRADO";
         }
@@ -263,88 +212,67 @@ export class ArmazemController {
 
     comprarProduto(descricao, quantidade, novosDados) {
         let produto = this.#buscarProduto(descricao);
-
         if (produto == undefined) {
             return "PRODUTO_NAO_ENCONTRADO";
         }
 
         quantidade = Number(quantidade);
-
         if (quantidade <= 0) {
             return "QUANTIDADE_INVALIDA";
         }
 
         let fornecedor = produto.fornecedor;
-
-        if (novosDados.cnpjFornecedor != undefined &&
-            novosDados.cnpjFornecedor != "") {
+        if (novosDados.cnpjFornecedor != undefined && novosDados.cnpjFornecedor != "") {
             fornecedor = this.#buscarFornecedor(novosDados.cnpjFornecedor);
-
             if (fornecedor == undefined) {
                 return "FORNECEDOR_NAO_ENCONTRADO";
             }
         }
 
         let precoCompra = produto.precoCompra;
-
-        if (novosDados.precoCompra != undefined &&
-            novosDados.precoCompra != "") {
+        if (novosDados.precoCompra != undefined && novosDados.precoCompra != "") {
             precoCompra = Number(novosDados.precoCompra);
         }
-
         if (fornecedor == undefined) {
             return "FORNECEDOR_NAO_VINCULADO";
         }
 
         let totalCompra = quantidade * precoCompra;
-
         if (totalCompra > fornecedor.creditoDisp) {
             return "CREDITO_INSUFICIENTE";
         }
-
-        if (novosDados.cnpjFornecedor != undefined &&
-            novosDados.cnpjFornecedor != "") {
+        if (novosDados.cnpjFornecedor != undefined && novosDados.cnpjFornecedor != "") {
             produto.fornecedor = fornecedor;
         }
-
-        if (novosDados.precoCompra != undefined &&
-            novosDados.precoCompra != "") {
+        if (novosDados.precoCompra != undefined && novosDados.precoCompra != "") {
             produto.precoCompra = precoCompra;
         }
-
-        if (novosDados.precoVenda != undefined &&
-            novosDados.precoVenda != "") {
+        if (novosDados.precoVenda != undefined && novosDados.precoVenda != "") {
             produto.precoVenda = Number(novosDados.precoVenda);
         }
 
-        produto.quantidadeEstoque =
-            produto.quantidadeEstoque + quantidade;
+        produto.quantidadeEstoque = produto.quantidadeEstoque + quantidade;
 
         return "SUCESSO";
     }
 
     venderProduto(descricao, quantidadeVendida) {
         let produto = this.#buscarProduto(descricao);
-
         if (produto == undefined) {
             return "PRODUTO_NAO_ENCONTRADO";
         }
 
         quantidadeVendida = Number(quantidadeVendida);
-
         if (quantidadeVendida <= 0) {
             return "QUANTIDADE_INVALIDA";
         }
-
         if (produto.quantidadeEstoque < quantidadeVendida) {
             return "ESTOQUE_INSUFICIENTE";
         }
 
-        produto.quantidadeEstoque =
-            produto.quantidadeEstoque - quantidadeVendida;
+        produto.quantidadeEstoque = produto.quantidadeEstoque - quantidadeVendida;
 
         let totalVenda = quantidadeVendida * produto.precoVenda;
-
         return {
             codigo: "SUCESSO",
             totalVenda: totalVenda
@@ -353,17 +281,14 @@ export class ArmazemController {
 
     consultarTotalVendasAno(descricao) {
         let produto = this.#buscarProduto(descricao);
-
         if (produto == undefined) {
             return "PRODUTO_NAO_ENCONTRADO";
         }
 
         let totalUnidades = 0;
-
         for (let mes = 1; mes <= 12; mes++) {
             totalUnidades += produto.getQtdVendasMes(mes);
         }
-
         return {
             descricao: produto.descricao,
             totalUnidades: totalUnidades,
@@ -373,23 +298,18 @@ export class ArmazemController {
 
     consultarMaisVendidoMes(descricao) {
         let produto = this.#buscarProduto(descricao);
-
         if (produto == undefined) {
             return "PRODUTO_NAO_ENCONTRADO";
         }
-
         let maiorQuantidade = -1;
         let mesMaisVendido = 1;
-
         for (let mes = 1; mes <= 12; mes++) {
             let quantidade = produto.getQtdVendasMes(mes);
-
             if (quantidade > maiorQuantidade) {
                 maiorQuantidade = quantidade;
                 mesMaisVendido = mes;
             }
         }
-
         return {
             descricao: produto.descricao,
             mes: mesMaisVendido,
@@ -399,18 +319,15 @@ export class ArmazemController {
 
     consultarFaturamentoMes(mes) {
         mes = Number(mes);
-
         if (mes < 1 || mes > 12) {
             return "MES_INVALIDO";
         }
 
         let faturamento = 0;
-
         for (let produto of this.#vetProdutos) {
             faturamento +=
                 produto.getQtdVendasMes(mes) * produto.precoVenda;
         }
-
         return {
             mes: mes,
             faturamento: faturamento
@@ -419,53 +336,41 @@ export class ArmazemController {
 
     listarProdutos() {
         let lista = [];
-
         for (let produto of this.#vetProdutos) {
             lista.push(this.#produtoDTO(produto));
         }
-
         return lista;
     }
 
     listarTabelaVendasAnual() {
         let tabela = [];
-
         for (let produto of this.#vetProdutos) {
             let dadosProduto = {
                 descricao: produto.descricao,
                 vendas: []
             };
-
             for (let mes = 1; mes <= 12; mes++) {
                 dadosProduto.vendas.push(produto.getQtdVendasMes(mes));
             }
-
             tabela.push(dadosProduto);
         }
-
         return tabela;
     }
 
     listarProdutosFornecedor(cnpj) {
         let fornecedor = this.#buscarFornecedor(cnpj);
-
         if (fornecedor == undefined) {
             return "FORNECEDOR_NAO_ENCONTRADO";
         }
 
         let lista = [];
-
         for (let produto of this.#vetProdutos) {
-            if (produto.fornecedor != undefined &&
-                produto.fornecedor.cnpj == cnpj) {
+            if (produto.fornecedor != undefined && produto.fornecedor.cnpj == cnpj) {
                 lista.push(this.#produtoDTO(produto));
             }
         }
-
         return lista;
     }
-
-    // Persistência
 
     salvarDados() {
         let dadosFornecedores = [];
@@ -474,21 +379,17 @@ export class ArmazemController {
         for (let fornecedor of this.#vetFornecedores) {
             dadosFornecedores.push(fornecedor.stringify());
         }
-
         for (let produto of this.#vetProdutos) {
             dadosProdutos.push(produto.stringify());
         }
-
         localStorage.setItem(
             "armazemFornecedores",
             JSON.stringify(dadosFornecedores)
         );
-
         localStorage.setItem(
             "armazemProdutos",
             JSON.stringify(dadosProdutos)
         );
-
         return "SUCESSO";
     }
 
@@ -501,10 +402,8 @@ export class ArmazemController {
 
         if (dadosFornecedores != null) {
             dadosFornecedores = JSON.parse(dadosFornecedores);
-
             for (let dados of dadosFornecedores) {
                 let fornecedorDados = JSON.parse(dados);
-
                 let fornecedor = new Fornecedor(
                     fornecedorDados.razaoSocial,
                     fornecedorDados.cnpj,
@@ -512,29 +411,24 @@ export class ArmazemController {
                     fornecedorDados.endereco,
                     fornecedorDados.creditoDisp
                 );
-
                 this.#vetFornecedores.push(fornecedor);
             }
         }
 
         if (dadosProdutos != null) {
             dadosProdutos = JSON.parse(dadosProdutos);
-
             for (let dados of dadosProdutos) {
                 let produtoDados = JSON.parse(dados);
-
                 let produto = new Produto(
                     produtoDados.descricao,
                     produtoDados.precoCompra,
                     produtoDados.precoVenda,
                     produtoDados.quantidadeEstoque
                 );
-
                 if (produtoDados.vetVendas != undefined) {
                     for (let mes = 1; mes <= 12; mes++) {
                         produto.setQtdVendasMes(
-                            mes,
-                            produtoDados.vetVendas[mes - 1]
+                            mes, produtoDados.vetVendas[mes - 1]
                         );
                     }
                 }
@@ -544,16 +438,13 @@ export class ArmazemController {
                     let fornecedor = this.#buscarFornecedor(
                         produtoDados.fornecedor
                     );
-
                     if (fornecedor != undefined) {
                         produto.fornecedor = fornecedor;
                     }
                 }
-
                 this.#vetProdutos.push(produto);
             }
         }
-
         return "SUCESSO";
     }
 }
