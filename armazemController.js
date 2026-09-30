@@ -162,20 +162,16 @@ export class ArmazemController {
         if (produto == undefined) {
             return "PRODUTO_NAO_ENCONTRADO";
         }
-        if (novosDados.precoCompra != undefined &&
-            novosDados.precoCompra != "") {
+        if (novosDados.precoCompra != undefined && novosDados.precoCompra != "") {
             produto.precoCompra = Number(novosDados.precoCompra);
         }
-        if (novosDados.precoVenda != undefined &&
-            novosDados.precoVenda != "") {
+        if (novosDados.precoVenda != undefined && novosDados.precoVenda != "") {
             produto.precoVenda = Number(novosDados.precoVenda);
         }
-        if (novosDados.quantidadeEstoque != undefined &&
-            novosDados.quantidadeEstoque != "") {
+        if (novosDados.quantidadeEstoque != undefined && novosDados.quantidadeEstoque != "") {
             produto.quantidadeEstoque = Number(novosDados.quantidadeEstoque);
         }
-        if (novosDados.cnpjFornecedor != undefined &&
-            novosDados.cnpjFornecedor != "") {
+        if (novosDados.cnpjFornecedor != undefined && novosDados.cnpjFornecedor != "") {
             let fornecedor = this.#buscarFornecedor(novosDados.cnpjFornecedor);
             if (fornecedor == undefined) {
                 return "FORNECEDOR_NAO_ENCONTRADO";
@@ -433,8 +429,7 @@ export class ArmazemController {
                     }
                 }
 
-                if (produtoDados.fornecedor != undefined &&
-                    produtoDados.fornecedor != null) {
+                if (produtoDados.fornecedor != undefined && produtoDados.fornecedor != null) {
                     let fornecedor = this.#buscarFornecedor(
                         produtoDados.fornecedor
                     );
