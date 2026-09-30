@@ -4,42 +4,42 @@ const controller = new ArmazemController();
 controller.carregarDados();
 
 // ── Elementos do DOM ─────────────────────────────────────────────────────────
-const rbProduto      = document.getElementById("rbProduto");
-const rbFornecedor   = document.getElementById("rbFornecedor");
-const divProduto     = document.getElementById("cadastroProduto");
-const divFornecedor  = document.getElementById("cadastroFornecedor");
+const rbProduto = document.getElementById("rbProduto");
+const rbFornecedor = document.getElementById("rbFornecedor");
+const divProduto = document.getElementById("cadastroProduto");
+const divFornecedor = document.getElementById("cadastroFornecedor");
 
-const selectProduto    = document.getElementById("selectOpcaoProduto");
+const selectProduto = document.getElementById("selectOpcaoProduto");
 const selectFornecedor = document.getElementById("selectOpcaoFornecedor");
 
 // Campos Produto
-const inProduto     = document.getElementById("inProduto");
+const inProduto = document.getElementById("inProduto");
 const inPrecoCompra = document.getElementById("inPrecoCompra");
-const inPrecoVenda  = document.getElementById("inPrecoVenda");
-const inQtd         = document.getElementById("inQtd");
-const inMes         = document.getElementById("inMes");
-const inFornecedor  = document.getElementById("inFornecedor");
+const inPrecoVenda = document.getElementById("inPrecoVenda");
+const inQtd = document.getElementById("inQtd");
+const inMes = document.getElementById("inMes");
+const inFornecedor = document.getElementById("inFornecedor");
 
 // Campos Fornecedor
-const inRazaoSoc    = document.getElementById("inRazaoSoc");
-const inCnpj        = document.getElementById("inCnpj");
-const inTelefone    = document.getElementById("inTelefone");
-const inEndereco    = document.getElementById("inEndereco");
+const inRazaoSoc = document.getElementById("inRazaoSoc");
+const inCnpj = document.getElementById("inCnpj");
+const inTelefone = document.getElementById("inTelefone");
+const inEndereco = document.getElementById("inEndereco");
 const inCreditoDisp = document.getElementById("inCreditoDisp");
 
-const btOk          = document.getElementById("btOk");
-const outResultado  = document.getElementById("outResultado");
+const btOk = document.getElementById("btOk");
+const outResultado = document.getElementById("outResultado");
 const sectionResult = document.querySelector(".sectionResultado");
 
 // ── Radio buttons — alterna entre divs ───────────────────────────────────────
 rbProduto.addEventListener("change", () => {
-    divProduto.style.display    = "block";
+    divProduto.style.display = "block";
     divFornecedor.style.display = "none";
     limparTela();
 });
 
 rbFornecedor.addEventListener("change", () => {
-    divProduto.style.display    = "none";
+    divProduto.style.display = "none";
     divFornecedor.style.display = "block";
     limparTela();
 });
@@ -52,10 +52,10 @@ selectProduto.addEventListener("change", () => {
 
     switch (opcao) {
         case "Cadastrar":
-            habilitar(inProduto,     "Digite o nome do produto");
+            habilitar(inProduto, "Digite o nome do produto");
             habilitar(inPrecoCompra, "Preço de Compra");
-            habilitar(inPrecoVenda,  "Preço de Venda");
-            habilitar(inQtd,         "Quantidade em estoque");
+            habilitar(inPrecoVenda, "Preço de Venda");
+            habilitar(inQtd, "Quantidade em estoque");
             break;
         case "Excluir":
         case "Consultar":
@@ -63,27 +63,27 @@ selectProduto.addEventListener("change", () => {
             habilitar(inProduto, "Digite o nome do produto");
             break;
         case "Alterar":
-            habilitar(inProduto,     "Digite o nome do produto");
+            habilitar(inProduto, "Digite o nome do produto");
             habilitar(inPrecoCompra, "Novo Preço de Compra (opcional)");
-            habilitar(inPrecoVenda,  "Novo Preço de Venda (opcional)");
-            habilitar(inQtd,         "Nova Quantidade em Estoque (opcional)");
-            habilitar(inFornecedor,  "CNPJ do Fornecedor (opcional)");
+            habilitar(inPrecoVenda, "Novo Preço de Venda (opcional)");
+            habilitar(inQtd, "Nova Quantidade em Estoque (opcional)");
+            habilitar(inFornecedor, "CNPJ do Fornecedor (opcional)");
             break;
         case "AlterarVenda":
             habilitar(inProduto, "Digite o nome do produto");
-            habilitar(inMes,     "Mês [1-12]");
-            habilitar(inQtd,     "Quantidade vendida no mês");
+            habilitar(inMes, "Mês [1-12]");
+            habilitar(inQtd, "Quantidade vendida no mês");
             break;
         case "Comprar":
-            habilitar(inProduto,     "Digite o nome do produto");
-            habilitar(inQtd,         "Quantidade comprada");
+            habilitar(inProduto, "Digite o nome do produto");
+            habilitar(inQtd, "Quantidade comprada");
             habilitar(inPrecoCompra, "Novo Preço de Compra (opcional)");
-            habilitar(inPrecoVenda,  "Novo Preço de Venda (opcional)");
-            habilitar(inFornecedor,  "CNPJ do Fornecedor (opcional)");
+            habilitar(inPrecoVenda, "Novo Preço de Venda (opcional)");
+            habilitar(inFornecedor, "CNPJ do Fornecedor (opcional)");
             break;
         case "Vender":
             habilitar(inProduto, "Digite o nome do produto");
-            habilitar(inQtd,     "Quantidade vendida");
+            habilitar(inQtd, "Quantidade vendida");
             break;
         case "ConsultarProd":
         case "Faturamento":
@@ -110,10 +110,10 @@ selectFornecedor.addEventListener("change", () => {
 
     switch (opcao) {
         case "Cadastrar":
-            habilitar(inRazaoSoc,    "Razão Social");
-            habilitar(inCnpj,        "XX.XXX.XXX/XXXX-XX");
-            habilitar(inTelefone,    "(XX)XXXXX-XXXX");
-            habilitar(inEndereco,    "Endereço");
+            habilitar(inRazaoSoc, "Razão Social");
+            habilitar(inCnpj, "XX.XXX.XXX/XXXX-XX");
+            habilitar(inTelefone, "(XX)XXXXX-XXXX");
+            habilitar(inEndereco, "Endereço");
             habilitar(inCreditoDisp, "Crédito Disponibilizado");
             break;
         case "Excluir":
@@ -121,10 +121,10 @@ selectFornecedor.addEventListener("change", () => {
             habilitar(inCnpj, "XX.XXX.XXX/XXXX-XX");
             break;
         case "Alterar":
-            habilitar(inCnpj,        "XX.XXX.XXX/XXXX-XX");
-            habilitar(inRazaoSoc,    "Nova Razão Social (opcional)");
-            habilitar(inTelefone,    "Novo Telefone (opcional)");
-            habilitar(inEndereco,    "Novo Endereço (opcional)");
+            habilitar(inCnpj, "XX.XXX.XXX/XXXX-XX");
+            habilitar(inRazaoSoc, "Nova Razão Social (opcional)");
+            habilitar(inTelefone, "Novo Telefone (opcional)");
+            habilitar(inEndereco, "Novo Endereço (opcional)");
             habilitar(inCreditoDisp, "Novo Crédito (opcional)");
             break;
         case "FiltrarLimCred":
@@ -148,13 +148,13 @@ btOk.addEventListener("click", () => {
 });
 
 function executarOpcaoProduto() {
-    const opcao       = selectProduto.value;
-    const descricao   = inProduto.value.trim();
+    const opcao = selectProduto.value;
+    const descricao = inProduto.value.trim();
     const precoCompra = Number(inPrecoCompra.value);
-    const precoVenda  = Number(inPrecoVenda.value);
-    const qtd         = Number(inQtd.value);
-    const mes         = Number(inMes.value);
-    const cnpjForn    = inFornecedor.value.trim();
+    const precoVenda = Number(inPrecoVenda.value);
+    const qtd = Number(inQtd.value);
+    const mes = Number(inMes.value);
+    const cnpjForn = inFornecedor.value.trim();
 
     switch (opcao) {
         case "Cadastrar":
@@ -181,13 +181,56 @@ function executarOpcaoProduto() {
             if (descricao == "") {
                 exibirMensagem("O campo Produto é obrigatório!", "red");
             } else {
-                const resultado = controller.alterarProduto(descricao, precoCompra, precoVenda, qtd, cnpjForn);
-                const msgs = {
-                    "SUCESSO":                   { cor: "blue", texto: "Produto alterado com sucesso!" },
-                    "PRODUTO_NAO_ENCONTRADO":    { cor: "red",  texto: `Erro! Produto "${descricao}" não encontrado!` },
-                    "FORNECEDOR_NAO_ENCONTRADO": { cor: "red",  texto: `Erro! Fornecedor com CNPJ "${cnpjForn}" não encontrado!` }
-                };
-                exibirMensagem(msgs[resultado].texto, msgs[resultado].cor);
+                let novosDados = {};
+                let flag = false;
+
+                if (precoCompra != "") {
+                    novosDados.precoCompra = precoCompra;
+                    flag = true;
+                }
+                if (precoVenda != "") {
+                    novosDados.precoVenda = precoVenda;
+                    flag = true;
+                }
+                if (qtd != "") {
+                    novosDados.quantidadeEstoque = qtd;
+                    flag = true;
+                }
+                if (cnpjForn != "") {
+                    novosDados.cnpjFornecedor = cnpjForn;
+                    flag = true;
+                }
+                if (flag == false) {
+                    exibirMensagem(
+                        "Informe pelo menos um dado para alterar!",
+                        "red"
+                    );
+                } else {
+                    const resultado = controller.alterarProduto(
+                        descricao,
+                        novosDados
+                    );
+
+                    const msgs = {
+                        "SUCESSO": {
+                            cor: "blue",
+                            texto: "Produto alterado com sucesso!"
+                        },
+                        "PRODUTO_NAO_ENCONTRADO": {
+                            cor: "red",
+                            texto: `Erro! Produto "${descricao}" não encontrado!`
+                        },
+                        "FORNECEDOR_NAO_ENCONTRADO": {
+                            cor: "red",
+                            texto: `Erro! Fornecedor com CNPJ "${cnpjForn}" não encontrado!`
+                        }
+                    };
+
+                    exibirMensagem(
+                        msgs[resultado].texto,
+                        msgs[resultado].cor
+                    );
+                }
             }
             break;
         }
@@ -198,9 +241,9 @@ function executarOpcaoProduto() {
             } else {
                 const resultado = controller.alterarVendaMes(descricao, mes, qtd);
                 const msgs = {
-                    "SUCESSO":                { cor: "blue", texto: "Venda mensal atualizada com sucesso!" },
-                    "PRODUTO_NAO_ENCONTRADO": { cor: "red",  texto: `Produto "${descricao}" não encontrado!` },
-                    "MES_INVALIDO":           { cor: "red",  texto: "Mês inválido! Informe um valor entre 1 e 12." }
+                    "SUCESSO": { cor: "blue", texto: "Venda mensal atualizada com sucesso!" },
+                    "PRODUTO_NAO_ENCONTRADO": { cor: "red", texto: `Produto "${descricao}" não encontrado!` },
+                    "MES_INVALIDO": { cor: "red", texto: "Mês inválido! Informe um valor entre 1 e 12." }
                 };
                 exibirMensagem(msgs[resultado].texto, msgs[resultado].cor);
             }
@@ -234,10 +277,10 @@ function executarOpcaoProduto() {
             } else {
                 const resultado = controller.comprarProduto(descricao, qtd, precoCompra, precoVenda, cnpjForn);
                 const msgs = {
-                    "SUCESSO":                   { cor: "blue", texto: `Compra de "${descricao}" registrada com sucesso!` },
-                    "PRODUTO_NAO_ENCONTRADO":    { cor: "red",  texto: `Erro! Produto "${descricao}" não encontrado!` },
-                    "FORNECEDOR_NAO_ENCONTRADO": { cor: "red",  texto: `Erro! Fornecedor com CNPJ "${cnpjForn}" não encontrado!` },
-                    "CREDITO_INSUFICIENTE":      { cor: "red",  texto: "Erro! O valor total da compra excede o crédito disponibilizado pelo Fornecedor!" }
+                    "SUCESSO": { cor: "blue", texto: `Compra de "${descricao}" registrada com sucesso!` },
+                    "PRODUTO_NAO_ENCONTRADO": { cor: "red", texto: `Erro! Produto "${descricao}" não encontrado!` },
+                    "FORNECEDOR_NAO_ENCONTRADO": { cor: "red", texto: `Erro! Fornecedor com CNPJ "${cnpjForn}" não encontrado!` },
+                    "CREDITO_INSUFICIENTE": { cor: "red", texto: "Erro! O valor total da compra excede o crédito disponibilizado pelo Fornecedor!" }
                 };
                 exibirMensagem(msgs[resultado].texto, msgs[resultado].cor);
             }
@@ -366,12 +409,12 @@ function executarOpcaoProduto() {
 }
 
 function executarOpcaoFornecedor() {
-    const opcao      = selectFornecedor.value;
-    const razaoSoc   = inRazaoSoc.value.trim();
-    const cnpj       = inCnpj.value.trim();
-    const telefone   = inTelefone.value.trim();
-    const endereco   = inEndereco.value.trim();
-    const credito    = Number(inCreditoDisp.value);
+    const opcao = selectFornecedor.value;
+    const razaoSoc = inRazaoSoc.value.trim();
+    const cnpj = inCnpj.value.trim();
+    const telefone = inTelefone.value.trim();
+    const endereco = inEndereco.value.trim();
+    const credito = Number(inCreditoDisp.value);
 
     switch (opcao) {
         case "Cadastrar":
@@ -390,24 +433,67 @@ function executarOpcaoFornecedor() {
             } else {
                 const resultado = controller.excluirFornecedor(cnpj);
                 const msgs = {
-                    "SUCESSO":                   { cor: "blue", texto: "Fornecedor excluído com sucesso!" },
-                    "FORNECEDOR_NAO_ENCONTRADO": { cor: "red",  texto: `Erro! Fornecedor com CNPJ "${cnpj}" não encontrado!` },
-                    "FORNECEDOR_COM_PRODUTOS":   { cor: "red",  texto: "Erro! Não é possível excluir: fornecedor possui produtos vinculados!" }
+                    "SUCESSO": { cor: "blue", texto: "Fornecedor excluído com sucesso!" },
+                    "FORNECEDOR_NAO_ENCONTRADO": { cor: "red", texto: `Erro! Fornecedor com CNPJ "${cnpj}" não encontrado!` },
+                    "FORNECEDOR_COM_PRODUTOS": { cor: "red", texto: "Erro! Não é possível excluir: fornecedor possui produtos vinculados!" }
                 };
                 exibirMensagem(msgs[resultado].texto, msgs[resultado].cor);
             }
             break;
         }
 
-        case "Alterar":
+        case "Alterar": {
             if (cnpj == "") {
                 exibirMensagem("O campo CNPJ é obrigatório!", "red");
-            } else if (controller.alterarFornecedor(cnpj, razaoSoc, telefone, endereco, credito)) {
-                exibirMensagem("Fornecedor alterado com sucesso!", "blue");
             } else {
-                exibirMensagem(`Erro! Fornecedor com CNPJ "${cnpj}" não encontrado!`, "red");
+                let novosDados = {};
+                let flag = false;
+
+                if (razaoSoc != "") {
+                    novosDados.razaoSocial = razaoSoc;
+                    flag = true;
+                }
+                if (telefone != "") {
+                    novosDados.telefone = telefone;
+                    flag = true;
+                }
+                if (endereco != "") {
+                    novosDados.endereco = endereco;
+                    flag = true;
+                }
+                if (credito != "") {
+                    novosDados.creditoDisp = credito;
+                    flag = true;
+                }
+                if (flag == false) {
+                    exibirMensagem(
+                        "Informe pelo menos um dado para alterar!",
+                        "red"
+                    );
+                } else {
+                    const resultado = controller.alterarFornecedor(
+                        cnpj,
+                        novosDados
+                    );
+                    const msgs = {
+                        "SUCESSO": {
+                            cor: "blue",
+                            texto: "Fornecedor alterado com sucesso!"
+                        },
+                        "FORNECEDOR_NAO_ENCONTRADO": {
+                            cor: "red",
+                            texto: `Erro! Fornecedor com CNPJ "${cnpj}" não encontrado!`
+                        }
+                    };
+
+                    exibirMensagem(
+                        msgs[resultado].texto,
+                        msgs[resultado].cor
+                    );
+                }
             }
             break;
+        }
 
         case "Consultar": {
             if (cnpj == "") {
@@ -458,7 +544,7 @@ function executarOpcaoFornecedor() {
 // ── Funções auxiliares da View ────────────────────────────────────────────────
 
 function habilitar(campo, placeholder) {
-    campo.disabled    = false;
+    campo.disabled = false;
     campo.placeholder = placeholder;
 }
 
@@ -478,7 +564,7 @@ function desabilitarCamposFornecedor() {
 
 function limparTela() {
     outResultado.textContent = "";
-    sectionResult.innerHTML  = "";
+    sectionResult.innerHTML = "";
 }
 
 function exibirMensagem(texto, cor) {
@@ -522,7 +608,7 @@ function criarTabelaProdutos(lista) {
 }
 
 function criarTabelaVendas(lista) {
-    const meses = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+    const meses = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
     const table = document.createElement("table");
     const thead = document.createElement("thead");
     const tbody = document.createElement("tbody");

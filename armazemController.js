@@ -82,26 +82,26 @@ export class ArmazemController {
     }
 
     alterarFornecedor(cnpj, novosDados) {
-        let fornecedor = this.#buscarFornecedor(cnpj);
-        if (fornecedor == undefined) {
-            return "FORNECEDOR_NAO_ENCONTRADO";
-        }
-        if (novosDados.razaoSocial != undefined && novosDados.razaoSocial != "") {
-            fornecedor.razaoSocial = novosDados.razaoSocial;
-        }
-        if (novosDados.telefone != undefined && novosDados.telefone != "") {
-            fornecedor.telefone = novosDados.telefone;
-        }
-        if (novosDados.endereco != undefined && novosDados.endereco != "") {
-            fornecedor.endereco = novosDados.endereco;
-        }
-        if (novosDados.creditoDisp != undefined && novosDados.creditoDisp != "") {
-            fornecedor.creditoDisp = Number(novosDados.creditoDisp);
-        }
+    let fornecedor = this.#buscarFornecedor(cnpj);
 
-        this.salvarDados();
-        return "SUCESSO";
+    if (fornecedor == undefined) {
+        return "FORNECEDOR_NAO_ENCONTRADO";
     }
+    if (novosDados.razaoSocial != undefined) {
+        fornecedor.razaoSocial = novosDados.razaoSocial;
+    }
+    if (novosDados.telefone != undefined) {
+        fornecedor.telefone = novosDados.telefone;
+    }
+    if (novosDados.endereco != undefined) {
+        fornecedor.endereco = novosDados.endereco;
+    }
+    if (novosDados.creditoDisp != undefined) {
+        fornecedor.creditoDisp = Number(novosDados.creditoDisp);
+    }
+    this.salvarDados();
+    return "SUCESSO";
+}
 
     consultarFornecedor(cnpj) {
         let fornecedor = this.#buscarFornecedor(cnpj);
@@ -163,31 +163,36 @@ export class ArmazemController {
         return "SUCESSO";
     }
 
-    alterarProduto(descricao, novosDados) {
-        let produto = this.#buscarProduto(descricao);
-        if (produto == undefined) {
-            return "PRODUTO_NAO_ENCONTRADO";
-        }
-        if (novosDados.precoCompra != undefined && novosDados.precoCompra != "") {
-            produto.precoCompra = Number(novosDados.precoCompra);
-        }
-        if (novosDados.precoVenda != undefined && novosDados.precoVenda != "") {
-            produto.precoVenda = Number(novosDados.precoVenda);
-        }
-        if (novosDados.quantidadeEstoque != undefined && novosDados.quantidadeEstoque != "") {
-            produto.quantidadeEstoque = Number(novosDados.quantidadeEstoque);
-        }
-        if (novosDados.cnpjFornecedor != undefined && novosDados.cnpjFornecedor != "") {
-            let fornecedor = this.#buscarFornecedor(novosDados.cnpjFornecedor);
-            if (fornecedor == undefined) {
-                return "FORNECEDOR_NAO_ENCONTRADO";
-            }
-            produto.fornecedor = fornecedor;
-        }
+ alterarProduto(descricao, novosDados) {
+    let produto = this.#buscarProduto(descricao);
 
-        this.salvarDados();
-        return "SUCESSO";
+    if (produto == undefined) {
+        return "PRODUTO_NAO_ENCONTRADO";
     }
+
+    // O Controller verifica quais novos dados foram enviados pela View.
+    // Os dados que não foram informados não são alterados.
+    if (novosDados.precoCompra != undefined) {
+        produto.precoCompra = Number(novosDados.precoCompra);
+    }
+    if (novosDados.precoVenda != undefined) {
+        produto.precoVenda = Number(novosDados.precoVenda);
+    }
+    if (novosDados.quantidadeEstoque != undefined) {
+        produto.quantidadeEstoque = Number(novosDados.quantidadeEstoque);
+    }
+    if (novosDados.cnpjFornecedor != undefined) {
+        let fornecedor = this.#buscarFornecedor(
+            novosDados.cnpjFornecedor
+        );
+        if (fornecedor == undefined) {
+            return "FORNECEDOR_NAO_ENCONTRADO";
+        }
+        produto.fornecedor = fornecedor;
+    }
+    this.salvarDados();
+    return "SUCESSO";
+}
 
     consultarProduto(descricao) {
         let produto = this.#buscarProduto(descricao);
