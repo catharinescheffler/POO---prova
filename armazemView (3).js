@@ -3,12 +3,10 @@ import { ArmazemController } from "./armazemController.js";
 const controller = new ArmazemController();
 controller.carregarDados();
 
-// ── Elementos do DOM ─────────────────────────────────────────────────────────
 const rbProduto = document.getElementById("rbProduto");
 const rbFornecedor = document.getElementById("rbFornecedor");
 const divProduto = document.getElementById("cadastroProduto");
 const divFornecedor = document.getElementById("cadastroFornecedor");
-
 const selectProduto = document.getElementById("selectOpcaoProduto");
 const selectFornecedor = document.getElementById("selectOpcaoFornecedor");
 
@@ -31,23 +29,31 @@ const btOk = document.getElementById("btOk");
 const outResultado = document.getElementById("outResultado");
 const sectionResult = document.querySelector(".sectionResultado");
 
-// ── Radio buttons — alterna entre divs ───────────────────────────────────────
+
+// TROCAR ENTRE PRODUTO E FORNECEDOR
 rbProduto.addEventListener("change", () => {
     divProduto.style.display = "block";
     divFornecedor.style.display = "none";
+
+    desabilitarCamposFornecedor();
     limparTela();
 });
 
 rbFornecedor.addEventListener("change", () => {
     divProduto.style.display = "none";
     divFornecedor.style.display = "block";
+
+    desabilitarCamposProduto();
     limparTela();
 });
 
-// ── Select Produto — habilita campos conforme funcionalidade ─────────────────
+
+// OPÇÕES DE PRODUTO
 selectProduto.addEventListener("change", () => {
+
     desabilitarCamposProduto();
     limparTela();
+
     const opcao = selectProduto.value;
 
     switch (opcao) {
@@ -56,24 +62,30 @@ selectProduto.addEventListener("change", () => {
             habilitar(inPrecoCompra, "Preço de Compra");
             habilitar(inPrecoVenda, "Preço de Venda");
             habilitar(inQtd, "Quantidade em estoque");
+            habilitar(inFornecedor, "CNPJ do Fornecedor (opcional)");
             break;
+
         case "Excluir":
         case "Consultar":
         case "ConsultarQtd":
+        case "ConsultarMaisVendido":
             habilitar(inProduto, "Digite o nome do produto");
             break;
+
         case "Alterar":
             habilitar(inProduto, "Digite o nome do produto");
-            habilitar(inPrecoCompra, "Novo Preço de Compra (opcional)");
-            habilitar(inPrecoVenda, "Novo Preço de Venda (opcional)");
-            habilitar(inQtd, "Nova Quantidade em Estoque (opcional)");
-            habilitar(inFornecedor, "CNPJ do Fornecedor (opcional)");
+            habilitar(inPrecoCompra, "Novo Preço de Compra");
+            habilitar(inPrecoVenda, "Novo Preço de Venda");
+            habilitar(inQtd, "Nova Quantidade");
+            habilitar(inFornecedor, "CNPJ do Fornecedor");
             break;
+
         case "AlterarVenda":
             habilitar(inProduto, "Digite o nome do produto");
             habilitar(inMes, "Mês [1-12]");
-            habilitar(inQtd, "Quantidade vendida no mês");
+            habilitar(inQtd, "Quantidade vendida");
             break;
+
         case "Comprar":
             habilitar(inProduto, "Digite o nome do produto");
             habilitar(inQtd, "Quantidade comprada");
@@ -81,230 +93,373 @@ selectProduto.addEventListener("change", () => {
             habilitar(inPrecoVenda, "Novo Preço de Venda (opcional)");
             habilitar(inFornecedor, "CNPJ do Fornecedor (opcional)");
             break;
+
         case "Vender":
             habilitar(inProduto, "Digite o nome do produto");
             habilitar(inQtd, "Quantidade vendida");
             break;
-        case "ConsultarProd":
+
         case "Faturamento":
             habilitar(inMes, "Mês [1-12]");
             break;
-        case "FiltrarQtdEst":
-            habilitar(inQtd, "Quantidade máxima em estoque");
-            break;
+
         case "ListarProdFornecedor":
             habilitar(inFornecedor, "CNPJ do Fornecedor");
             break;
-        case "ListarVendas":
+
         case "ListarProdutos":
-            break; // sem campos necessários
+        case "ListarVendas":
+            break;
     }
     btOk.disabled = false;
 });
 
-// ── Select Fornecedor — habilita campos conforme funcionalidade ──────────────
+
+// OPÇÕES DE FORNECEDOR
 selectFornecedor.addEventListener("change", () => {
+
     desabilitarCamposFornecedor();
     limparTela();
+
     const opcao = selectFornecedor.value;
 
     switch (opcao) {
         case "Cadastrar":
             habilitar(inRazaoSoc, "Razão Social");
-            habilitar(inCnpj, "XX.XXX.XXX/XXXX-XX");
-            habilitar(inTelefone, "(XX)XXXXX-XXXX");
+            habilitar(inCnpj, "CNPJ");
+            habilitar(inTelefone, "Telefone");
             habilitar(inEndereco, "Endereço");
             habilitar(inCreditoDisp, "Crédito Disponibilizado");
             break;
+
         case "Excluir":
         case "Consultar":
-            habilitar(inCnpj, "XX.XXX.XXX/XXXX-XX");
+            habilitar(inCnpj, "CNPJ");
             break;
+
         case "Alterar":
-            habilitar(inCnpj, "XX.XXX.XXX/XXXX-XX");
-            habilitar(inRazaoSoc, "Nova Razão Social (opcional)");
-            habilitar(inTelefone, "Novo Telefone (opcional)");
-            habilitar(inEndereco, "Novo Endereço (opcional)");
-            habilitar(inCreditoDisp, "Novo Crédito (opcional)");
+            habilitar(inCnpj, "CNPJ");
+            habilitar(inRazaoSoc, "Nova Razão Social");
+            habilitar(inTelefone, "Novo Telefone");
+            habilitar(inEndereco, "Novo Endereço");
+            habilitar(inCreditoDisp, "Novo Crédito");
             break;
+
         case "FiltrarLimCred":
             habilitar(inCreditoDisp, "Crédito mínimo");
             break;
+
         case "Listar":
             break;
     }
     btOk.disabled = false;
 });
 
-// ── Botão Ok ─────────────────────────────────────────────────────────────────
+
+// BOTÃO OK
 btOk.addEventListener("click", () => {
+
     limparTela();
 
     if (rbProduto.checked) {
         executarOpcaoProduto();
-    } else if (rbFornecedor.checked) {
+    }
+
+    if (rbFornecedor.checked) {
         executarOpcaoFornecedor();
     }
 });
 
+
+// PRODUTOS
 function executarOpcaoProduto() {
+
     const opcao = selectProduto.value;
     const descricao = inProduto.value.trim();
-    const precoCompra = Number(inPrecoCompra.value);
-    const precoVenda = Number(inPrecoVenda.value);
-    const qtd = Number(inQtd.value);
-    const mes = Number(inMes.value);
-    const cnpjForn = inFornecedor.value.trim();
+    const precoCompra = inPrecoCompra.value;
+    const precoVenda = inPrecoVenda.value;
+    const qtd = inQtd.value;
+    const mes = inMes.value;
+    const cnpjFornecedor = inFornecedor.value.trim();
 
     switch (opcao) {
-        case "Cadastrar":
-            if (descricao == "" || precoCompra == 0) {
-                exibirMensagem("Os campos Produto e Preço de Compra são obrigatórios!", "red");
-            } else if (controller.cadastrarProduto(descricao, precoCompra, qtd)) {
-                exibirMensagem(`Produto "${descricao}" cadastrado com sucesso!`, "blue");
-            } else {
-                exibirMensagem(`Erro! Já existe um produto com a descrição "${descricao}"!`, "red");
-            }
-            break;
-
-        case "Excluir":
+        case "Cadastrar": {
             if (descricao == "") {
                 exibirMensagem("O campo Produto é obrigatório!", "red");
-            } else if (controller.excluirProduto(descricao)) {
-                exibirMensagem(`Produto "${descricao}" excluído com sucesso!`, "blue");
-            } else {
-                exibirMensagem(`Erro! Produto "${descricao}" não encontrado!`, "red");
+                break;
             }
+
+            const resultado = controller.cadastrarProduto( descricao, precoCompra, precoVenda, qtd, cnpjFornecedor );
+
+            const mensagens = {
+                "SUCESSO": {
+                    texto: `Produto "${descricao}" cadastrado com sucesso!`,
+                    cor: "blue"
+                },
+                "PRODUTO_JA_CADASTRADO": {
+                    texto: `Erro! O produto "${descricao}" já está cadastrado!`,
+                    cor: "red"
+                },
+                "FORNECEDOR_NAO_ENCONTRADO": {
+                    texto: `Erro! Fornecedor com CNPJ "${cnpjFornecedor}" não encontrado!`,
+                    cor: "red"
+                }
+            };
+
+            exibirMensagem(
+                mensagens[resultado].texto,
+                mensagens[resultado].cor
+            );
             break;
+        }
+
+
+        case "Excluir": {
+            if (descricao == "") {
+                exibirMensagem("O campo Produto é obrigatório!", "red");
+                break;
+            }
+
+            const resultado = controller.excluirProduto(descricao);
+            const mensagens = {
+                "SUCESSO": {
+                    texto: `Produto "${descricao}" excluído com sucesso!`,
+                    cor: "blue"
+                },
+                "PRODUTO_NAO_ENCONTRADO": {
+                    texto: `Produto "${descricao}" não encontrado!`,
+                    cor: "red"
+                }
+            };
+            exibirMensagem(
+                mensagens[resultado].texto,
+                mensagens[resultado].cor
+            );
+            break;
+        }
+
 
         case "Alterar": {
+
             if (descricao == "") {
                 exibirMensagem("O campo Produto é obrigatório!", "red");
-            } else {
-                let novosDados = {};
-                let flag = false;
-
-                if (precoCompra != "") {
-                    novosDados.precoCompra = precoCompra;
-                    flag = true;
-                }
-                if (precoVenda != "") {
-                    novosDados.precoVenda = precoVenda;
-                    flag = true;
-                }
-                if (qtd != "") {
-                    novosDados.quantidadeEstoque = qtd;
-                    flag = true;
-                }
-                if (cnpjForn != "") {
-                    novosDados.cnpjFornecedor = cnpjForn;
-                    flag = true;
-                }
-                if (flag == false) {
-                    exibirMensagem(
-                        "Informe pelo menos um dado para alterar!",
-                        "red"
-                    );
-                } else {
-                    const resultado = controller.alterarProduto(
-                        descricao,
-                        novosDados
-                    );
-
-                    const msgs = {
-                        "SUCESSO": {
-                            cor: "blue",
-                            texto: "Produto alterado com sucesso!"
-                        },
-                        "PRODUTO_NAO_ENCONTRADO": {
-                            cor: "red",
-                            texto: `Erro! Produto "${descricao}" não encontrado!`
-                        },
-                        "FORNECEDOR_NAO_ENCONTRADO": {
-                            cor: "red",
-                            texto: `Erro! Fornecedor com CNPJ "${cnpjForn}" não encontrado!`
-                        }
-                    };
-
-                    exibirMensagem(
-                        msgs[resultado].texto,
-                        msgs[resultado].cor
-                    );
-                }
+                break;
             }
+
+            let novosDados = {};
+            let alterou = false;
+
+            if (inPrecoCompra.value != "") {
+                novosDados.precoCompra = precoCompra;
+                alterou = true;
+            }
+            if (inPrecoVenda.value != "") {
+                novosDados.precoVenda = precoVenda;
+                alterou = true;
+            }
+            if (inQtd.value != "") {
+                novosDados.quantidadeEstoque = qtd;
+                alterou = true;
+            }
+            if (cnpjFornecedor != "") {
+                novosDados.cnpjFornecedor = cnpjFornecedor;
+                alterou = true;
+            }
+            if (!alterou) {
+                exibirMensagem(
+                    "Informe pelo menos um dado para alterar!",
+                    "red"
+                );
+                break;
+            }
+
+            const resultado = controller.alterarProduto( descricao, novosDados );
+
+            const mensagens = {
+                "SUCESSO": {
+                    texto: "Produto alterado com sucesso!",
+                    cor: "blue"
+                },
+
+                "PRODUTO_NAO_ENCONTRADO": {
+                    texto: `Produto "${descricao}" não encontrado!`,
+                    cor: "red"
+                },
+
+                "FORNECEDOR_NAO_ENCONTRADO": {
+                    texto: `Fornecedor com CNPJ "${cnpjFornecedor}" não encontrado!`,
+                    cor: "red"
+                }
+            };
+
+            exibirMensagem(
+                mensagens[resultado].texto,
+                mensagens[resultado].cor
+            );
             break;
         }
 
-        case "AlterarVenda": {
-            if (descricao == "" || mes == 0 || qtd == 0) {
-                exibirMensagem("Os campos Produto, Mês e Quantidade são obrigatórios!", "red");
-            } else {
-                const resultado = controller.alterarVendaMes(descricao, mes, qtd);
-                const msgs = {
-                    "SUCESSO": { cor: "blue", texto: "Venda mensal atualizada com sucesso!" },
-                    "PRODUTO_NAO_ENCONTRADO": { cor: "red", texto: `Produto "${descricao}" não encontrado!` },
-                    "MES_INVALIDO": { cor: "red", texto: "Mês inválido! Informe um valor entre 1 e 12." }
-                };
-                exibirMensagem(msgs[resultado].texto, msgs[resultado].cor);
-            }
-            break;
-        }
 
         case "Consultar": {
+
             if (descricao == "") {
                 exibirMensagem("O campo Produto é obrigatório!", "red");
+                break;
+            }
+
+            const dados = controller.consultarProduto(descricao);
+
+            if (typeof dados == "string") {
+                exibirMensagem(
+                    `Produto "${descricao}" não encontrado!`,
+                    "red"
+                );
+
             } else {
-                const dados = controller.consultarProduto(descricao);
-                if (dados != undefined) {
-                    exibirMensagem(
-                        `Descrição: ${dados.descricao}\n` +
-                        `Preço de Compra: R$ ${dados.precoCompra.toFixed(2)}\n` +
-                        `Preço de Venda: R$ ${dados.precoVenda.toFixed(2)}\n` +
-                        `Quantidade em Estoque: ${dados.qtdEstoque}\n` +
-                        `Fornecedor: ${dados.cnpjForn ? dados.cnpjForn + " - " + dados.nomeForn : "Não vinculado"}`,
-                        "blue"
-                    );
-                } else {
-                    exibirMensagem(`Produto "${descricao}" não encontrado!`, "red");
+
+                let fornecedor = "Não vinculado";
+                if (dados.cnpjFornecedor != undefined) {
+                    fornecedor =
+                        dados.razaoSocialFornecedor +
+                        " - " +
+                        dados.cnpjFornecedor;
                 }
+
+                exibirMensagem(
+                    `Descrição: ${dados.descricao}\n` +
+                    `Preço de Compra: R$ ${dados.precoCompra.toFixed(2)}\n` +
+                    `Preço de Venda: R$ ${dados.precoVenda.toFixed(2)}\n` +
+                    `Quantidade em Estoque: ${dados.quantidadeEstoque}\n` +
+                    `Fornecedor: ${fornecedor}`,
+                    "blue"
+                );
             }
             break;
         }
+
+
+        case "AlterarVenda": {
+            if (descricao == "" || mes == "" || qtd == "") {
+                exibirMensagem(
+                    "Produto, mês e quantidade são obrigatórios!",
+                    "red"
+                );
+                break;
+            }
+
+            const resultado = controller.alterarVendaMes(descricao, mes, qtd );
+            const mensagens = {
+
+                "SUCESSO": {
+                    texto: "Venda do mês alterada com sucesso!",
+                    cor: "blue"
+                },
+                "PRODUTO_NAO_ENCONTRADO": {
+                    texto: `Produto "${descricao}" não encontrado!`,
+                    cor: "red"
+                },
+                "DADOS_INVALIDOS": {
+                    texto: "Mês ou quantidade inválidos!",
+                    cor: "red"
+                }
+            };
+
+            exibirMensagem(
+                mensagens[resultado].texto,
+                mensagens[resultado].cor
+            );
+            break;
+        }
+
 
         case "Comprar": {
-            if (descricao == "" || qtd == 0) {
-                exibirMensagem("Os campos Produto e Quantidade são obrigatórios!", "red");
-            } else {
-                const resultado = controller.comprarProduto(descricao, qtd, precoCompra, precoVenda, cnpjForn);
-                const msgs = {
-                    "SUCESSO": { cor: "blue", texto: `Compra de "${descricao}" registrada com sucesso!` },
-                    "PRODUTO_NAO_ENCONTRADO": { cor: "red", texto: `Erro! Produto "${descricao}" não encontrado!` },
-                    "FORNECEDOR_NAO_ENCONTRADO": { cor: "red", texto: `Erro! Fornecedor com CNPJ "${cnpjForn}" não encontrado!` },
-                    "CREDITO_INSUFICIENTE": { cor: "red", texto: "Erro! O valor total da compra excede o crédito disponibilizado pelo Fornecedor!" }
-                };
-                exibirMensagem(msgs[resultado].texto, msgs[resultado].cor);
+            if (descricao == "" || qtd == "") {
+                exibirMensagem(
+                    "Produto e quantidade são obrigatórios!",
+                    "red"
+                );
+                break;
             }
+
+            let novosDados = {};
+
+            if (precoCompra != "") {
+                novosDados.precoCompra = precoCompra;
+            }
+            if (precoVenda != "") {
+                novosDados.precoVenda = precoVenda;
+            }
+            if (cnpjFornecedor != "") {
+                novosDados.cnpjFornecedor = cnpjFornecedor;
+            }
+
+            const resultado = controller.comprarProduto(descricao, qtd, novosDados );
+            const mensagens = {
+                "SUCESSO": {
+                    texto: `Compra do produto "${descricao}" registrada com sucesso!`,
+                    cor: "blue"
+                },
+                "PRODUTO_NAO_ENCONTRADO": {
+                    texto: `Produto "${descricao}" não encontrado!`,
+                    cor: "red"
+                },
+                "FORNECEDOR_NAO_ENCONTRADO": {
+                    texto: `Fornecedor "${cnpjFornecedor}" não encontrado!`,
+                    cor: "red"
+                },
+                "FORNECEDOR_NAO_VINCULADO": {
+                    texto: "O produto não possui fornecedor vinculado!",
+                    cor: "red"
+                },
+                "CREDITO_INSUFICIENTE": {
+                    texto: "Crédito do fornecedor insuficiente!",
+                    cor: "red"
+                },
+                "QUANTIDADE_INVALIDA": {
+                    texto: "Quantidade inválida!",
+                    cor: "red"
+                }
+            };
+
+            exibirMensagem(
+                mensagens[resultado].texto,
+                mensagens[resultado].cor
+            );
             break;
         }
 
+
         case "Vender": {
-            if (descricao == "" || qtd == 0) {
-                exibirMensagem("Os campos Produto e Quantidade são obrigatórios!", "red");
+            if (descricao == "" || qtd == "") {
+                exibirMensagem(
+                    "Produto e quantidade são obrigatórios!",
+                    "red"
+                );
+                break;
+            }
+
+            const resultado = controller.venderProduto( descricao, qtd );
+
+            if (typeof resultado == "object" &&
+                resultado.codigo == "SUCESSO") {
+                exibirMensagem(
+                    `Venda realizada com sucesso!\n` +
+                    `Total a pagar: R$ ${resultado.totalVenda.toFixed(2)}`,
+                    "blue"
+                );
+
             } else {
-                const resultado = controller.venderProduto(descricao, qtd);
-                if (resultado.codigo === "SUCESSO") {
-                    exibirMensagem(
-                        `Venda registrada! Total: R$ ${resultado.totalVenda.toFixed(2)}`,
-                        "blue"
-                    );
-                } else if (resultado.codigo === "PRODUTO_NAO_ENCONTRADO") {
-                    exibirMensagem(`Erro! Produto "${descricao}" não encontrado!`, "red");
-                } else {
-                    exibirMensagem(
-                        `Erro! Estoque insuficiente. Estoque atual: ${resultado.estoqueAtual} unidades.`,
-                        "red"
-                    );
-                }
+
+                const mensagens = {
+                    "PRODUTO_NAO_ENCONTRADO":
+                        `Produto "${descricao}" não encontrado!`,
+                    "QUANTIDADE_INVALIDA":
+                        "Quantidade inválida!",
+                    "ESTOQUE_INSUFICIENTE":
+                        "Quantidade em estoque insuficiente!"
+                };
+
+                exibirMensagem( mensagens[resultado], "red" );
             }
             break;
         }
@@ -312,321 +467,454 @@ function executarOpcaoProduto() {
         case "ConsultarQtd": {
             if (descricao == "") {
                 exibirMensagem("O campo Produto é obrigatório!", "red");
-            } else {
-                const dados = controller.consultarTotalVendasAno(descricao);
-                if (dados != undefined) {
-                    exibirMensagem(
-                        `Produto: ${dados.descricao}\nTotal vendido no ano: ${dados.totalVendas} unidades`,
-                        "blue"
-                    );
-                } else {
-                    exibirMensagem(`Produto "${descricao}" não encontrado!`, "red");
-                }
+                break;
             }
-            break;
-        }
 
-        case "ConsultarProd": {
-            if (mes == 0) {
-                exibirMensagem("O campo Mês é obrigatório!", "red");
-            } else {
-                const dados = controller.consultarMaisVendidoMes(mes);
-                if (dados != undefined) {
-                    exibirMensagem(
-                        `Produto mais vendido no mês ${mes}:\n` +
-                        `${dados.descricao} — ${dados.qtdVendida} unidades`,
-                        "blue"
-                    );
-                } else {
-                    exibirMensagem("Nenhum produto cadastrado!", "red");
-                }
-            }
-            break;
-        }
+            const dados = controller.consultarTotalVendasAno(descricao);
 
-        case "Faturamento": {
-            if (mes == 0) {
-                exibirMensagem("O campo Mês é obrigatório!", "red");
-            } else {
-                const dados = controller.consultarFaturamentoMes(mes);
+            if (typeof dados == "string") {
                 exibirMensagem(
-                    `Faturamento do mês ${dados.mes}: R$ ${dados.faturamento.toFixed(2)}`,
+                    `Produto "${descricao}" não encontrado!`,
+                    "red"
+                );
+            } else {
+                exibirMensagem(
+                    `Produto: ${dados.descricao}\n` +
+                    `Total vendido no ano: ${dados.totalUnidades} unidades\n` +
+                    `Faturamento: R$ ${dados.faturamento.toFixed(2)}`,
                     "blue"
                 );
             }
             break;
         }
 
-        case "FiltrarQtdEst": {
-            if (qtd == 0) {
-                exibirMensagem("O campo Quantidade é obrigatório!", "red");
+        case "ConsultarMaisVendido": {
+            if (descricao == "") {
+                exibirMensagem("O campo Produto é obrigatório!", "red");
+                break;
+            }
+
+            const dados = controller.consultarMaisVendidoMes(descricao);
+            if (typeof dados == "string") {
+                exibirMensagem(
+                    `Produto "${descricao}" não encontrado!`,
+                    "red"
+                );
+
             } else {
-                const lista = controller.listarProdutos()
-                    .filter(p => p.qtdEstoque <= qtd);
-                if (lista.length > 0) {
-                    sectionResult.appendChild(criarTabelaProdutos(lista));
-                } else {
-                    exibirMensagem("Nenhum produto encontrado com essa quantidade.", "red");
-                }
+
+                exibirMensagem(
+                    `Produto: ${dados.descricao}\n` +
+                    `Mês mais vendido: ${dados.mes}\n` +
+                    `Quantidade vendida: ${dados.quantidadeVendida}`,
+                    "blue"
+                );
+            }
+
+            break;
+        }
+
+        case "Faturamento": {
+            if (mes == "") {
+                exibirMensagem("Informe o mês!", "red");
+                break;
+            }
+
+            const dados = controller.consultarFaturamentoMes(mes);
+
+            if (typeof dados == "string") {
+                exibirMensagem("Mês inválido!", "red");
+            } else {
+
+                exibirMensagem(
+                    `Faturamento do mês ${dados.mes}: ` +
+                    `R$ ${dados.faturamento.toFixed(2)}`,
+                    "blue"
+                );
             }
             break;
         }
 
-        case "ListarProdutos":
-            const listaProd = controller.listarProdutos();
-            if (listaProd.length > 0) {
-                sectionResult.appendChild(criarTabelaProdutos(listaProd));
-            } else {
-                exibirMensagem("Nenhum produto cadastrado!", "red");
-            }
-            break;
+        case "ListarProdutos": {
+            const lista = controller.listarProdutos();
 
-        case "ListarVendas":
-            const listaVendas = controller.listarTabelaVendasAnual();
-            if (listaVendas.length > 0) {
-                sectionResult.appendChild(criarTabelaVendas(listaVendas));
+            if (lista.length == 0) {
+                exibirMensagem( "Nenhum produto cadastrado!", "red" );
             } else {
-                exibirMensagem("Nenhum produto cadastrado!", "red");
+                sectionResult.appendChild( criarTabelaProdutos(lista) );
             }
             break;
+        }
+
+
+        case "ListarVendas": {
+            const lista = controller.listarTabelaVendasAnual();
+
+            if (lista.length == 0) {
+                exibirMensagem( "Nenhum produto cadastrado!", "red" );
+            } else {
+                sectionResult.appendChild( criarTabelaProdutos(lista) );
+            }
+            break;
+        }
+
+        case "ListarVendas": {
+            const lista = controller.listarTabelaVendasAnual();
+
+            if (lista.length == 0) {
+                exibirMensagem( "Nenhum produto cadastrado!", "red" );
+            } else {
+                sectionResult.appendChild(
+                    criarTabelaVendas(lista)
+                );
+            }
+            break;
+        }
+
 
         case "ListarProdFornecedor": {
-            if (cnpjForn == "") {
-                exibirMensagem("O campo CNPJ do Fornecedor é obrigatório!", "red");
+            if (cnpjFornecedor == "") {
+                exibirMensagem( "Informe o CNPJ do fornecedor!", "red" );
+                break;
+            }
+
+            const lista = controller.listarProdutosFornecedor( cnpjFornecedor );
+
+            if (typeof lista == "string") {
+                exibirMensagem( "Fornecedor não encontrado!", "red" );
+            } else if (lista.length == 0) {
+                exibirMensagem( "Nenhum produto vinculado a este fornecedor!", "red" );
             } else {
-                const lista = controller.listarProdutosFornecedor(cnpjForn);
-                if (lista == undefined) {
-                    exibirMensagem(`Fornecedor com CNPJ "${cnpjForn}" não encontrado!`, "red");
-                } else if (lista.length === 0) {
-                    exibirMensagem("Nenhum produto vinculado a este fornecedor.", "red");
-                } else {
-                    sectionResult.appendChild(criarTabelaProdutos(lista));
-                }
+                sectionResult.appendChild(criarTabelaProdutos(lista) );
             }
             break;
         }
     }
 }
 
+// FORNECEDORES
 function executarOpcaoFornecedor() {
+
     const opcao = selectFornecedor.value;
-    const razaoSoc = inRazaoSoc.value.trim();
+    const razaoSocial = inRazaoSoc.value.trim();
     const cnpj = inCnpj.value.trim();
     const telefone = inTelefone.value.trim();
     const endereco = inEndereco.value.trim();
-    const credito = Number(inCreditoDisp.value);
+    const credito = inCreditoDisp.value;
 
     switch (opcao) {
-        case "Cadastrar":
-            if (razaoSoc == "" || cnpj == "") {
-                exibirMensagem("Razão Social e CNPJ são obrigatórios!", "red");
-            } else if (controller.cadastrarFornecedor(razaoSoc, cnpj, telefone, endereco, credito)) {
-                exibirMensagem(`Fornecedor "${razaoSoc}" cadastrado com sucesso!`, "blue");
-            } else {
-                exibirMensagem(`Erro! Já existe um fornecedor com o CNPJ "${cnpj}"!`, "red");
+        case "Cadastrar": {
+            if (razaoSocial == "" || cnpj == "") {
+                exibirMensagem( "Razão Social e CNPJ são obrigatórios!", "red" );
+                break;
             }
+
+            const resultado = controller.cadastrarFornecedor( razaoSocial, cnpj, telefone, endereco, credito );
+
+            const mensagens = {
+                "SUCESSO": {
+                    texto: `Fornecedor "${razaoSocial}" cadastrado com sucesso!`,
+                    cor: "blue"
+                },
+                "FORNECEDOR_JA_CADASTRADO": {
+                    texto: `Já existe um fornecedor com o CNPJ "${cnpj}"!`,
+                    cor: "red"
+                }
+            };
+            exibirMensagem(
+                mensagens[resultado].texto,
+                mensagens[resultado].cor
+            );
             break;
+        }
 
         case "Excluir": {
             if (cnpj == "") {
-                exibirMensagem("O campo CNPJ é obrigatório!", "red");
-            } else {
-                const resultado = controller.excluirFornecedor(cnpj);
-                const msgs = {
-                    "SUCESSO": { cor: "blue", texto: "Fornecedor excluído com sucesso!" },
-                    "FORNECEDOR_NAO_ENCONTRADO": { cor: "red", texto: `Erro! Fornecedor com CNPJ "${cnpj}" não encontrado!` },
-                    "FORNECEDOR_COM_PRODUTOS": { cor: "red", texto: "Erro! Não é possível excluir: fornecedor possui produtos vinculados!" }
-                };
-                exibirMensagem(msgs[resultado].texto, msgs[resultado].cor);
+                exibirMensagem( "O campo CNPJ é obrigatório!", "red" );
+                break;
             }
+
+            const resultado = controller.excluirFornecedor(cnpj);
+
+            const mensagens = {
+                "SUCESSO": {
+                    texto: "Fornecedor excluído com sucesso!",
+                    cor: "blue"
+                },
+                "FORNECEDOR_NAO_ENCONTRADO": {
+                    texto: `Fornecedor "${cnpj}" não encontrado!`,
+                    cor: "red"
+                },
+                "FORNECEDOR_VINCULADO_A_PRODUTO": {
+                    texto: "Não é possível excluir: fornecedor vinculado a um produto!",
+                    cor: "red"
+                }
+            };
+
+            exibirMensagem( mensagens[resultado].texto, mensagens[resultado].cor );
             break;
         }
+
 
         case "Alterar": {
+
             if (cnpj == "") {
-                exibirMensagem("O campo CNPJ é obrigatório!", "red");
-            } else {
-                let novosDados = {};
-                let flag = false;
-
-                if (razaoSoc != "") {
-                    novosDados.razaoSocial = razaoSoc;
-                    flag = true;
-                }
-                if (telefone != "") {
-                    novosDados.telefone = telefone;
-                    flag = true;
-                }
-                if (endereco != "") {
-                    novosDados.endereco = endereco;
-                    flag = true;
-                }
-                if (credito != "") {
-                    novosDados.creditoDisp = credito;
-                    flag = true;
-                }
-                if (flag == false) {
-                    exibirMensagem(
-                        "Informe pelo menos um dado para alterar!",
-                        "red"
-                    );
-                } else {
-                    const resultado = controller.alterarFornecedor(
-                        cnpj,
-                        novosDados
-                    );
-                    const msgs = {
-                        "SUCESSO": {
-                            cor: "blue",
-                            texto: "Fornecedor alterado com sucesso!"
-                        },
-                        "FORNECEDOR_NAO_ENCONTRADO": {
-                            cor: "red",
-                            texto: `Erro! Fornecedor com CNPJ "${cnpj}" não encontrado!`
-                        }
-                    };
-
-                    exibirMensagem(
-                        msgs[resultado].texto,
-                        msgs[resultado].cor
-                    );
-                }
+                exibirMensagem( "O CNPJ é obrigatório!", "red" );
+                break;
             }
+
+            let novosDados = {};
+            let alterou = false;
+
+            if (razaoSocial != "") {
+                novosDados.razaoSocial = razaoSocial;
+                alterou = true;
+            }
+            if (telefone != "") {
+                novosDados.telefone = telefone;
+                alterou = true;
+            }
+            if (endereco != "") {
+                novosDados.endereco = endereco;
+                alterou = true;
+            }
+            if (credito != "") {
+                novosDados.creditoDisp = credito;
+                alterou = true;
+            }
+            if (!alterou) {
+                exibirMensagem( "Informe pelo menos um dado para alterar!", "red" );
+                break;
+            }
+
+            const resultado = controller.alterarFornecedor( cnpj, novosDados );
+
+            const mensagens = {
+                "SUCESSO": {
+                    texto: "Fornecedor alterado com sucesso!",
+                    cor: "blue"
+                },
+                "FORNECEDOR_NAO_ENCONTRADO": {
+                    texto: `Fornecedor "${cnpj}" não encontrado!`,
+                    cor: "red"
+                }
+            };
+
+            exibirMensagem( mensagens[resultado].texto, mensagens[resultado].cor);
             break;
         }
+
 
         case "Consultar": {
             if (cnpj == "") {
-                exibirMensagem("O campo CNPJ é obrigatório!", "red");
+                exibirMensagem( "O campo CNPJ é obrigatório!", "red" );
+                break;
+            }
+
+            const dados = controller.consultarFornecedor(cnpj);
+
+            if (typeof dados == "string") {
+                exibirMensagem( `Fornecedor "${cnpj}" não encontrado!`,"red" );
+
             } else {
-                const dados = controller.consultarFornecedor(cnpj);
-                if (dados != undefined) {
-                    exibirMensagem(
-                        `Razão Social: ${dados.razaoSocial}\n` +
-                        `CNPJ: ${dados.cnpj}\n` +
-                        `Telefone: ${dados.telefone}\n` +
-                        `Endereço: ${dados.endereco}\n` +
-                        `Crédito Disponibilizado: R$ ${dados.creditoDisp.toFixed(2)}`,
-                        "blue"
-                    );
-                } else {
-                    exibirMensagem(`Fornecedor com CNPJ "${cnpj}" não encontrado!`, "red");
-                }
+                exibirMensagem(
+                    `Razão Social: ${dados.razaoSocial}\n` +
+                    `CNPJ: ${dados.cnpj}\n` +
+                    `Telefone: ${dados.telefone}\n` +
+                    `Endereço: ${dados.endereco}\n` +
+                    `Crédito Disponibilizado: R$ ${dados.creditoDisp.toFixed(2)}`,
+                    "blue"
+                );
             }
             break;
         }
 
-        case "Listar":
-            const listaForn = controller.listarFornecedores();
-            if (listaForn.length > 0) {
-                sectionResult.appendChild(criarTabelaFornecedores(listaForn));
+
+        case "Listar": {
+            const lista = controller.listarFornecedores();
+
+            if (lista.length == 0) {
+                exibirMensagem( "Nenhum fornecedor cadastrado!","red" );
             } else {
-                exibirMensagem("Nenhum fornecedor cadastrado!", "red");
+                sectionResult.appendChild( criarTabelaFornecedores(lista) );
             }
             break;
+        }
+
 
         case "FiltrarLimCred": {
-            if (credito == 0) {
-                exibirMensagem("O campo Crédito Disponibilizado é obrigatório!", "red");
+
+            if (credito == "") {
+                exibirMensagem( "Informe o crédito mínimo!", "red" );
+                break;
+            }
+
+            const lista = controller.filtrarFornecedoresPorCredito( credito);
+
+            if (lista.length == 0) {
+                exibirMensagem( "Nenhum fornecedor encontrado!","red" );
             } else {
-                const lista = controller.filtrarFornecedoresPorCredito(credito);
-                if (lista.length > 0) {
-                    sectionResult.appendChild(criarTabelaFornecedores(lista));
-                } else {
-                    exibirMensagem("Nenhum fornecedor encontrado com esse limite de crédito.", "red");
-                }
+                sectionResult.appendChild( criarTabelaFornecedores(lista));
             }
             break;
         }
     }
 }
 
-// ── Funções auxiliares da View ────────────────────────────────────────────────
-
+// FUNÇÕES AUXILIARES
 function habilitar(campo, placeholder) {
+
     campo.disabled = false;
     campo.placeholder = placeholder;
 }
 
 function desabilitarCamposProduto() {
-    [inProduto, inPrecoCompra, inPrecoVenda, inQtd, inMes, inFornecedor].forEach(c => {
-        c.disabled = true; c.value = ""; c.placeholder = "";
+
+    [
+        inProduto,
+        inPrecoCompra,
+        inPrecoVenda,
+        inQtd,
+        inMes,
+        inFornecedor
+    ].forEach(campo => {
+
+        campo.disabled = true;
+        campo.value = "";
+        campo.placeholder = "";
+
     });
+
     btOk.disabled = true;
 }
 
 function desabilitarCamposFornecedor() {
-    [inRazaoSoc, inCnpj, inTelefone, inEndereco, inCreditoDisp].forEach(c => {
-        c.disabled = true; c.value = ""; c.placeholder = "";
+
+    [
+        inRazaoSoc,
+        inCnpj,
+        inTelefone,
+        inEndereco,
+        inCreditoDisp
+    ].forEach(campo => {
+
+        campo.disabled = true;
+        campo.value = "";
+        campo.placeholder = "";
+
     });
+
     btOk.disabled = true;
 }
 
 function limparTela() {
+
     outResultado.textContent = "";
     sectionResult.innerHTML = "";
 }
 
 function exibirMensagem(texto, cor) {
+
     outResultado.style.color = cor;
     outResultado.textContent = texto;
 }
 
+// TABELA DE PRODUTOS
 function criarTabelaProdutos(lista) {
+
     const table = document.createElement("table");
     const thead = document.createElement("thead");
     const tbody = document.createElement("tbody");
-
     const trHead = document.createElement("tr");
-    ["Descrição", "Preço Compra", "Preço Venda", "Estoque", "Total Vendas", "Fornecedor"].forEach(txt => {
+
+    [
+        "Descrição",
+        "Preço Compra",
+        "Preço Venda",
+        "Estoque",
+        "Fornecedor"
+    ].forEach(texto => {
+
         const th = document.createElement("th");
-        th.textContent = txt;
+
+        th.textContent = texto;
         trHead.appendChild(th);
     });
+
     thead.appendChild(trHead);
     table.appendChild(thead);
 
-    lista.forEach(p => {
+
+    lista.forEach(produto => {
+
         const tr = document.createElement("tr");
+        let fornecedor = "Não vinculado";
+
+        if (produto.cnpjFornecedor != undefined) {
+            fornecedor = produto.razaoSocialFornecedor + " - " + produto.cnpjFornecedor;
+        }
+
         [
-            p.descricao,
-            `R$ ${p.precoCompra.toFixed(2)}`,
-            `R$ ${p.precoVenda.toFixed(2)}`,
-            p.qtdEstoque,
-            p.totalAno,
-            p.cnpjForn ? `${p.cnpjForn} - ${p.nomeForn}` : "—"
-        ].forEach(val => {
+            produto.descricao,
+            `R$ ${produto.precoCompra.toFixed(2)}`,
+            `R$ ${produto.precoVenda.toFixed(2)}`,
+            produto.quantidadeEstoque,
+            fornecedor
+        ].forEach(valor => {
+
             const td = document.createElement("td");
-            td.textContent = val;
+
+            td.textContent = valor;
             tr.appendChild(td);
         });
+
         tbody.appendChild(tr);
     });
-
     table.appendChild(tbody);
     return table;
 }
 
+// TABELA DE VENDAS
 function criarTabelaVendas(lista) {
-    const meses = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+
+    const meses = [
+        "Jan", "Fev", "Mar", "Abr",
+        "Mai", "Jun", "Jul", "Ago",
+        "Set", "Out", "Nov", "Dez"
+    ];
+
     const table = document.createElement("table");
     const thead = document.createElement("thead");
     const tbody = document.createElement("tbody");
-
     const trHead = document.createElement("tr");
-    ["Produto", ...meses, "Total Ano"].forEach(txt => {
+
+    [
+        "Produto",
+        ...meses
+    ].forEach(texto => {
+
         const th = document.createElement("th");
-        th.textContent = txt;
+
+        th.textContent = texto;
         trHead.appendChild(th);
     });
+
     thead.appendChild(trHead);
     table.appendChild(thead);
 
-    lista.forEach(p => {
+
+    lista.forEach(produto => {
+
         const tr = document.createElement("tr");
-        [p.descricao, ...p.vendasMensais, p.totalAno].forEach(val => {
+
+        [
+            produto.descricao,
+            ...produto.vendas
+        ].forEach(valor => {
+
             const td = document.createElement("td");
-            td.textContent = val;
+
+            td.textContent = valor;
             tr.appendChild(td);
         });
         tbody.appendChild(tr);
@@ -636,30 +924,51 @@ function criarTabelaVendas(lista) {
     return table;
 }
 
+// TABELA DE FORNECEDORES
 function criarTabelaFornecedores(lista) {
+
     const table = document.createElement("table");
     const thead = document.createElement("thead");
     const tbody = document.createElement("tbody");
-
     const trHead = document.createElement("tr");
-    ["Razão Social", "CNPJ", "Telefone", "Endereço", "Crédito Disp."].forEach(txt => {
+
+    [
+        "Razão Social",
+        "CNPJ",
+        "Telefone",
+        "Endereço",
+        "Crédito"
+    ].forEach(texto => {
+
         const th = document.createElement("th");
-        th.textContent = txt;
+
+        th.textContent = texto;
         trHead.appendChild(th);
     });
+
     thead.appendChild(trHead);
     table.appendChild(thead);
 
-    lista.forEach(f => {
+
+    lista.forEach(fornecedor => {
+
         const tr = document.createElement("tr");
-        [f.razaoSocial, f.cnpj, f.telefone, f.endereco, `R$ ${f.creditoDisp.toFixed(2)}`].forEach(val => {
+
+        [
+            fornecedor.razaoSocial,
+            fornecedor.cnpj,
+            fornecedor.telefone,
+            fornecedor.endereco,
+            `R$ ${fornecedor.creditoDisp.toFixed(2)}`
+        ].forEach(valor => {
+
             const td = document.createElement("td");
-            td.textContent = val;
+
+            td.textContent = valor;
             tr.appendChild(td);
         });
         tbody.appendChild(tr);
     });
-
     table.appendChild(tbody);
     return table;
 }
